@@ -1,11 +1,12 @@
 import cv2
 from ultralytics import YOLO
+import pyttsx3
 
-# Load the YOLO model
 model = YOLO("yolov8n.pt")
-
-# Initialize the webcam
+engine = pyttsx3.init()
 cap = cv2.VideoCapture(0)
+person_detected = False
+
 
 while True:
     ret, frame = cap.read()
@@ -17,10 +18,10 @@ while True:
     for result in results:
         boxes = result.boxes
         for box in boxes:
-            x1, y1, x2, y2 = box.xyxy[0]  # Coordinates of the bounding box
-            confidence = box.conf[0]  # Confidence score for the detection
-            class_id = int(box.cls[0])  # Class ID of the detected object
-            class_name = model.names[class_id]  # Get the class name using class ID
+            x1, y1, x2, y2 = box.xyxy[0]  
+            confidence = box.conf[0]  
+            class_id = int(box.cls[0])  
+            class_name = model.names[class_id] 
 
             if confidence > 0.5:
                 cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
@@ -28,6 +29,14 @@ while True:
                 fontscale = 2.0
                 thickness = 3
                 cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, fontscale, (0, 255, 0), thickness)
+            
+            if class_name == 'person' and not person_detected:
+                engine.say("Hello, person!")
+                engine.runAndWait()
+                person_detected = True
+            elif class_name != 'person':
+                person_detected = False
+        
 
     cv2.imshow('Object Detection', frame)
 
