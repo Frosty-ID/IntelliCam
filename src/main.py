@@ -2,11 +2,18 @@ import cv2
 from ultralytics import YOLO
 import pyttsx3
 
+# Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
 model = YOLO("yolov8n.pt")
 engine = pyttsx3.init()
-cap = cv2.VideoCapture(0)
-person_detected = False
 
+# Connect to GoPro Streaming Protocol to use as capture device
+ip = '10.5.5.100'
+gopro_rtsp_url = 'rtsp://ip:8554/live'
+cap = cv2.VideoCapture(gopro_rtsp_url)
+
+person_detected = False
+if not cap.isOpened():
+    raise RuntimeError("Error: Could not open GoPro video stream.")
 
 while True:
     ret, frame = cap.read()
@@ -31,7 +38,7 @@ while True:
                 cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, fontscale, (0, 255, 0), thickness)
             
             if class_name == 'person' and not person_detected:
-                engine.say("Hello, person!")
+                engine.say("Hello their, how are you?")
                 engine.runAndWait()
                 person_detected = True
             elif class_name != 'person':
@@ -43,5 +50,7 @@ while True:
     if cv2.waitKey(1) == ord('q'):
         break
 
+
+# Release the video capture object and close any open OpenCV windows
 cap.release()
 cv2.destroyAllWindows()
