@@ -6,10 +6,7 @@ import pyttsx3
 model = YOLO("yolov8n.pt")
 engine = pyttsx3.init()
 
-# Connect to GoPro Streaming Protocol to use as capture device
-ip = '10.5.5.100'
-gopro_rtsp_url = 'rtsp://ip:8554/live'
-cap = cv2.VideoCapture(gopro_rtsp_url)
+cap = cv2.VideoCapture(0)
 
 person_detected = False
 if not cap.isOpened():
