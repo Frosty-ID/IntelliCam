@@ -1,10 +1,16 @@
 import cv2
-from ultralytics import YOLO
 import pyttsx3
+import torch
+import os
+from ultralytics import YOLO
 
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
-model = YOLO("yolov8n.pt")
+model_path = os.path.join('model', 'yolov8n.pt')
+model = YOLO(model_path)
 engine = pyttsx3.init()
+
+if torch.cuda.is_available():
+    model.to('cuda') 
 
 cap = cv2.VideoCapture(0)
 
