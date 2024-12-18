@@ -40,12 +40,9 @@ while True:
                 thickness = 3
                 cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, fontscale, (0, 255, 0), thickness)
             
-            if class_name == 'person' and not person_detected:
+            if class_name == 'person':
                 engine.say("Hello their, how are you?")
                 engine.runAndWait()
-                person_detected = True
-            elif class_name != 'person':
-                person_detected = False
         
 
     cv2.imshow('Object Detection', frame)
