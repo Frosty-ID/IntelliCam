@@ -1,13 +1,18 @@
 import cv2
-import pyttsx3
 import torch
+import pyttsx3
 import os
+import speech_recognition as sr
 from ultralytics import YOLO
+
 
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
 model_path = os.path.join('model', 'yolov8n.pt')
 model = YOLO(model_path)
 engine = pyttsx3.init()
+
+# Initialize Speech Recognition
+recognizer = sr.Recognizer()
 
 if torch.cuda.is_available():
     model.to('cuda') 
@@ -16,7 +21,7 @@ cap = cv2.VideoCapture(0)
 
 person_detected = False
 if not cap.isOpened():
-    raise RuntimeError("Error: Could not open GoPro video stream.")
+    raise RuntimeError("Error: Could not open Video Stream.")
 
 while True:
     ret, frame = cap.read()
@@ -40,14 +45,15 @@ while True:
                 thickness = 3
                 cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, fontscale, (0, 255, 0), thickness)
             
-            if class_name == 'person':
+            if class_name == 'person' and not person_detected:
                 engine.say("Hello their, how are you?")
                 engine.runAndWait()
+                person_detected = True
         
 
     cv2.imshow('Object Detection', frame)
 
-    if cv2.waitKey(1) == ord('q'):
+    if cv2.waitKey(10) == ord('q'):
         break
 
 
