@@ -1,9 +1,10 @@
 import cv2
 import torch
+import time
 import pyttsx3
 import os
-import speech_recognition as sr
 from ultralytics import YOLO
+from speech import stt_to_response_to_tts
 
 
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
@@ -11,8 +12,6 @@ model_path = os.path.join('model', 'yolov8n.pt')
 model = YOLO(model_path)
 engine = pyttsx3.init()
 
-# Initialize Speech Recognition
-recognizer = sr.Recognizer()
 
 if torch.cuda.is_available():
     model.to('cuda') 
@@ -45,10 +44,11 @@ while True:
                 thickness = 3
                 cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, fontscale, (0, 255, 0), thickness)
             
-            if class_name == 'person' and not person_detected:
-                engine.say("Hello their, how are you?")
+            if class_name == 'person':
+                engine.say("Hello their, if you need any help please feel free to ask?")
                 engine.runAndWait()
-                person_detected = True
+                stt_to_response_to_tts()
+                time.sleep(15)
         
 
     cv2.imshow('Object Detection', frame)
