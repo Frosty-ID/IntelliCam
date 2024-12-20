@@ -1,0 +1,1 @@
+Welcome to IntelliCam, the cutting-edge intelligent camera designed to facilitate seamless live conversations with customers. This camera utilizes advanced AI technology, enabling real-time interaction, engagement, and communication. 
