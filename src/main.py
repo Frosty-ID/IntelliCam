@@ -7,8 +7,12 @@ from ultralytics import YOLO
 from speech import stt_to_response_to_tts
 
 
+src_dir = os.path.dirname(os.path.realpath(__file__))  
+model_dir = os.path.join(src_dir, '..', 'model')  
+model_file = 'yolov8n.pt'
+model_path = os.path.join(model_dir, model_file)
+
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
-model_path = os.path.join('model', 'yolov8n.pt')
 model = YOLO(model_path)
 engine = pyttsx3.init()
 
