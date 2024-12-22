@@ -2,18 +2,11 @@ import cv2
 import torch
 import time
 import pyttsx3
-import os
 from ultralytics import YOLO
 from speech import stt_to_response_to_tts
 
-
-src_dir = os.path.dirname(os.path.realpath(__file__))  
-model_dir = os.path.join(src_dir, '..', 'model')  
-model_file = 'yolov8n.pt'
-model_path = os.path.join(model_dir, model_file)
-
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
-model = YOLO(model_path)
+model = YOLO('model/yolov8n.pt')
 engine = pyttsx3.init()
 
 
@@ -24,7 +17,7 @@ cap = cv2.VideoCapture(0)
 
 person_detected = False
 if not cap.isOpened():
-    raise RuntimeError("Error: Could not open Video Stream.")
+    raise RuntimeError("Could not open Video Stream.")
 
 while True:
     ret, frame = cap.read()
