@@ -1,9 +1,19 @@
 import cv2
 import torch
+import logging
 import time
 import pyttsx3
 from ultralytics import YOLO
 from speech import stt_to_response_to_tts
+
+# Configure Logging
+
+logging.basicConfig(
+    filename='monitoring.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 
 # Initialize Object Detection Model (Yolo) & Text-To-Speech Engine(pyttsx3)
 model = YOLO('model/yolov8n.pt')
@@ -11,12 +21,14 @@ engine = pyttsx3.init()
 
 
 if torch.cuda.is_available():
-    model.to('cuda') 
+    model.to('cuda')
+    logging.info("Model using CUDA") 
 
 cap = cv2.VideoCapture(0)
 
 person_detected = False
 if not cap.isOpened():
+    logging.error("Could not open webcam")
     raise RuntimeError("Could not open Video Stream.")
 
 while True:
@@ -43,6 +55,7 @@ while True:
             
             if class_name == 'person':
                 engine.say("Hello their, if you need any help please feel free to ask?")
+                logging.info("Engine: Hello their, if you need any help please feel free to ask?")
                 engine.runAndWait()
                 stt_to_response_to_tts()
                 time.sleep(15)
@@ -51,6 +64,7 @@ while True:
     cv2.imshow('Object Detection', frame)
 
     if cv2.waitKey(10) == ord('q'):
+        logging.info("User: Quit Application")
         break
 
 
