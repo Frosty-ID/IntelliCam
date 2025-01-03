@@ -1,0 +1,8 @@
+opencv-python
+torch
+pyttsx3
+ultralytics
+openai
+SpeechRecognition
+python-dotenv
+flask
