@@ -42,10 +42,6 @@ while True:
                 
                 cv2.imshow('Object Detection', frame)
 
-                if class_name == 'person':
-                    # do something
-                    pass
-
         if cv2.waitKey(1) == ord('q'):
             break
 
