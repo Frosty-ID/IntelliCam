@@ -1,6 +1,6 @@
 import speech_recognition as sr
 import pyttsx3
-import openai 
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
@@ -9,28 +9,48 @@ tts_engine = pyttsx3.init()
 
 
 load_dotenv()
-API_KEY = os.getenv('OPENAI_API_KEY')
+API_KEY = os.getenv('DEEPSEEK_KEY')
 
 if not API_KEY:
-    raise ValueError("ERROR: OPENAI_API_KEY not found in environment variables")
+    raise ValueError("ERROR: DEEPSEEK_KEY not found in environment variables")
 
 try:
     with sr.Microphone() as source:
-        
+        print("Listening...")
         audio = recognizer.listen(source)
 
         if audio:
-            print("We in business")
+            print("Audio captured successfully")
 
         user_input = recognizer.recognize_google(audio)
+        print(f"You said {user_input}")
 
-        response = openai.chat.completions.create(
-                model="gpt-3.5 turbo",
-                messages=[{"role": "user", "content": user_input}]
-            )
+        client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=API_KEY,
+        )
+
+        response = client.chat.completions.create(
+            model="deepseek/deepseek-r1:free",
+            messages=[
+            {
+                "role": "user",
+                "content": user_input
+            }
+        ]
+        )
+
+        if response.choices:
+            ai_message = response.choices[0].message.content
+            if ai_message:
+                ai_response = ai_message
+            else:
+                ai_response = "No content returned from the AI."
+        else:
+            ai_response = "No choices available in the response."
 
 
-        ai_response = response['choices'][0]['message']['content']
+        print(f"AI Response: {ai_response}")
         tts_engine.say(ai_response)
         tts_engine.runAndWait()
 
