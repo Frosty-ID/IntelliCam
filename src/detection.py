@@ -48,6 +48,6 @@ while True:
     except Exception as ex:
         break
 
-# Release the video capture object and close any open OpenCV windows
+
 cap.release()
 cv2.destroyAllWindows()
