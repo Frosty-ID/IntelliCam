@@ -3,7 +3,7 @@ import torch
 import sys
 from ultralytics import YOLO
 
-# Initialize YOLO
+
 model = YOLO('model/yolov8n.pt')
 
 if torch.cuda.is_available():
