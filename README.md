@@ -1,3 +1,9 @@
-To Install All Required Dependencies
-Run (UNIX): pip3 install -r requirements.txt
-Run (WINDOWS): pip install -r requirements.txt
+## To Install All Required Dependencies
+
+- **For UNIX:**
+  ```bash
+  pip3 install -r requirements.txt
+
+- **For Windows:**
+  ```bash
+  pip install -r requirements.txt
